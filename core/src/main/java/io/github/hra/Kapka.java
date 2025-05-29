@@ -24,9 +24,30 @@ public class Kapka {
         sprite.setSize(1, 1);
         sprite.setX(MathUtils.random(0f, worldWidth - 1));
         sprite.setY(worldHeight);
+//        sprite.setOrigin(50, 50);
 	}
 
 	public void draw(SpriteBatch batch) {
             sprite.draw(batch);
+	}
+	
+	public void moveDown(float delta) {
+		sprite.translateY(speed * delta);
+	}
+
+	public float getY() {		
+		return sprite.getY();
+	}
+
+	public float getX() {
+		return sprite.getX();
+	}
+
+	public float getWidth() {
+		return sprite.getWidth();
+	}
+
+	public float getHeight() {
+		return sprite.getHeight();
 	}
 }

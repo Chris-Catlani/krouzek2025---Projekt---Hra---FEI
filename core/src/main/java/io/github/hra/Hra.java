@@ -1,5 +1,7 @@
 package io.github.hra;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -30,16 +32,17 @@ public class Hra implements Screen{
     private Sprite bucketSprite;
     
     private Vector2 touchPos;
-    Array<Sprite> dropSprites;
+    Array<Kapka> kapky;
     
     Rectangle bucketRectangle;
     Rectangle dropRectangle;
-
+    Random random;
     
     float dropTimer;
 
     @Override
     public void show() {
+    	random = new Random();
         batch = new SpriteBatch();
         image = new Texture("libgdx.png");
         backgroundTexture = new Texture("background.png");
@@ -55,7 +58,7 @@ public class Hra implements Screen{
         bucketSprite.setSize(1, 1); // Define the size of the sprite
         
         touchPos = new Vector2();
-        dropSprites = new Array<>();
+        kapky = new Array<>();
         
         bucketRectangle = new Rectangle();
         dropRectangle = new Rectangle();
@@ -92,7 +95,7 @@ public class Hra implements Screen{
         bucketSprite.draw(spriteBatch); // Sprites have their own draw method
         
      // draw each sprite
-        for (Sprite dropSprite : dropSprites) {
+        for (Kapka dropSprite : kapky) {
             dropSprite.draw(spriteBatch);
         }
         
@@ -109,11 +112,8 @@ public class Hra implements Screen{
         float worldHeight = viewport.getWorldHeight();
         
         // create the drop sprite
-        Sprite dropSprite = new Sprite(dropTexture);
-        dropSprite.setSize(dropWidth, dropHeight);
-        dropSprite.setX(MathUtils.random(0f, worldWidth - dropWidth));
-        dropSprite.setY(worldHeight);
-        dropSprites.add(dropSprite); // Add it to the list
+        Kapka novakapka = new Kapka(random.nextFloat(-3.5f, -1.0f), dropTexture, worldHeight, worldHeight);
+        kapky.add(novakapka); // Add it to the list
     }
 
     @Override
@@ -142,20 +142,21 @@ public class Hra implements Screen{
 	
         
 	 // Loop through the sprites backwards to prevent out of bounds errors
-	    for (int i = dropSprites.size - 1; i >= 0; i--) {
-	        Sprite dropSprite = dropSprites.get(i); // Get the sprite from the list
+	    for (int i = kapky.size - 1; i >= 0; i--) {
+	        Kapka dropSprite = kapky.get(i); // Get the sprite from the list
 	        float dropWidth = dropSprite.getWidth();
 	        float dropHeight = dropSprite.getHeight();
 
 	        // Apply the drop position and size to the dropRectangle
 	        dropRectangle.set(dropSprite.getX(), dropSprite.getY(), dropWidth, dropHeight);
 	        
-	        dropSprite.translateY(-2f * delta);
+	        dropSprite.moveDown(delta);
+	        
 
 	        // if the top of the drop goes below the bottom of the view, remove it
-	        if (dropSprite.getY() < -dropHeight) dropSprites.removeIndex(i);
+	        if (dropSprite.getY() < -dropHeight) kapky.removeIndex(i);
 	        else if (bucketRectangle.overlaps(dropRectangle)) { // Check if the bucket overlaps the drop
-	            dropSprites.removeIndex(i); // Remove the drop
+	            kapky.removeIndex(i); // Remove the drop
 	            dropSound.play(); // Play the sound
 	        }
 	    }
