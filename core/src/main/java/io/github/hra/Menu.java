@@ -23,8 +23,8 @@ public class Menu implements Screen {
 
 	@Override
 	public void show() {
-		backgroundTexture = new Texture("background.png");
-
+		backgroundTexture = new Texture("background2.png");
+        
 	}
 
 	@Override

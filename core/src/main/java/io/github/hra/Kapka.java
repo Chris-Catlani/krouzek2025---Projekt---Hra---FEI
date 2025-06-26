@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class Kapka {
 	private float speed;
+	private float speedx;
 	private Texture dropTexture;
 	private Sprite sprite;
 
@@ -24,7 +25,8 @@ public class Kapka {
         sprite.setSize(1, 1);
         sprite.setX(MathUtils.random(0f, worldWidth - 1));
         sprite.setY(worldHeight);
-//        sprite.setOrigin(50, 50);
+        speedx = MathUtils.random(-0.5f, 0.5f);
+        		//        sprite.setOrigin(50, 50);
 	}
 
 	public void draw(SpriteBatch batch) {
@@ -32,7 +34,7 @@ public class Kapka {
 	}
 	
 	public void moveDown(float delta) {
-		sprite.translateY(speed * delta);
+		sprite.translate(speedx * delta, speed * delta);;
 	}
 
 	public float getY() {		
